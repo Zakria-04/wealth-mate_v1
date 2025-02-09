@@ -12,13 +12,21 @@
   font-family: Arial, Helvetica, sans-serif;
 }
 
+html,
 body {
-  background: rgb(194, 210, 233);
+  height: 100%;
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: rgb(255, 255, 255);
   background: linear-gradient(
-    278deg,
-    rgba(194, 210, 233, 1) 0%,
-    rgba(193, 207, 225, 1) 29%,
-    rgba(212, 225, 234, 1) 69%,
-    rgba(255, 255, 255, 1) 100%
+    155deg,
+    rgba(255, 255, 255, 1) 0%,
+    rgba(212, 225, 234, 1) 32%,
+    rgba(193, 207, 225, 1) 50%,
+    rgba(194, 210, 233, 1) 100%
   );
 }
