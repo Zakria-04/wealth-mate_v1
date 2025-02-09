@@ -1,0 +1,30 @@
+.container {
+  background-color: var(--bg-color-1);
+  padding: 2rem;
+  display: flex;
+  justify-content: space-between;
+  color: var(--text-color-1);
+}
+
+.btnContainer {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+}
+
+.btnContainer a {
+  color: var(--text-color-1);
+}
+
+.signUpBtn {
+  background-color: var(--primary-color);
+  padding: 1rem;
+  border-radius: 3rem;
+  width: 10rem;
+  text-align: center;
+}
+
+.signUpBtn a {
+  color: var(--text-color-2);
+  text-decoration: none;
+}
