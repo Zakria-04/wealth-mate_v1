@@ -13,8 +13,9 @@
   gap: 2rem;
 }
 
-.btnContainer a {
+.btnContainer p {
   color: var(--text-color-1);
+  text-decoration: none;
 }
 
 .signUpBtn {
@@ -23,9 +24,10 @@
   border-radius: 3rem;
   width: 10rem;
   text-align: center;
+  cursor: pointer;
+  text-decoration: none;
 }
 
-.signUpBtn a {
+.signUpBtn p {
   color: var(--text-color-2);
-  text-decoration: none;
 }

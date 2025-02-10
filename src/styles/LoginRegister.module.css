@@ -1,0 +1,60 @@
+.container {
+  color: var(--text-color-1);
+}
+
+.form {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: var(--text-color-2);
+  padding: 2rem;
+  width: 24rem;
+  border-radius: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  min-height: 30rem;
+}
+
+.form input:last-of-type {
+  margin-bottom: 0;
+}
+
+.logStatus {
+  font-size: 2.5rem;
+  font-weight: lighter;
+  text-align: center;
+}
+
+.form input {
+  width: 100%;
+  padding: 1.2rem;
+  border-radius: 0.35rem;
+  border: 1px solid var(--text-color-1);
+  margin-bottom: 1rem;
+  font-size: 1rem;
+  color: var(--text-color-1);
+  outline: none;
+}
+
+.forgotHelpText {
+  font-size: 0.95rem;
+  color: var(--primary-color);
+  cursor: pointer;
+}
+
+.logBtn {
+  padding: 1rem;
+  width: 100%;
+  background-color: var(--primary-color);
+  border: none;
+  font-size: 1.2rem;
+  color: var(--text-color-2);
+  border-radius: 0.35rem;
+}
+
+.form p span {
+  color: var(--primary-color);
+  cursor: pointer;
+}
