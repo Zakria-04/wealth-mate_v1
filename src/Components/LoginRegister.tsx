@@ -1,18 +1,23 @@
 "use client";
+
 import { useRouter, useSearchParams } from "next/navigation";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styles from "../styles/LoginRegister.module.css";
+
 
 const LoginRegister = () => {
   const searchParams = useSearchParams();
   const authStatus = searchParams.get("authStatus");
   const router = useRouter();
 
-  let currentAuthStatus = authStatus === "login" ? true : false;
+  const currentAuthStatus = authStatus === "login" ? true : false;
   const [paramStatus, setParamStatus] = useState(currentAuthStatus);
 
+  useEffect(() => {
+    setParamStatus(authStatus === "login");
+  }, [authStatus]);
+
   const handleParamStatusChange = () => {
-    setParamStatus(!paramStatus);
     const newStatus = paramStatus ? "signup" : "login";
     router.push(`/auth?authStatus=${newStatus}`, { scroll: false });
   };
@@ -38,14 +43,16 @@ const LoginRegister = () => {
         />
 
         <input
-          type="text"
+          type="password"
           placeholder={
             paramStatus ? "Enter your password" : "Create a password"
           }
         />
         {/* -------- */}
 
-        <a className={styles.forgotHelpText}>{paramStatus && "Forgot your password?"}</a>
+        <a className={styles.forgotHelpText}>
+          {paramStatus && "Forgot your password?"}
+        </a>
         <button className={styles.logBtn}>
           {paramStatus ? "Login" : "Get Started"}
         </button>
@@ -53,7 +60,7 @@ const LoginRegister = () => {
           {/* Don't have an account? <span>Sign up</span> now and get started! */}
           {paramStatus ? (
             <>
-              Don't have an account?{" "}
+              Don&apos;t have an account?{" "}
               <span onClick={handleParamStatusChange}>Sign up</span> now and get
               started!
             </>
