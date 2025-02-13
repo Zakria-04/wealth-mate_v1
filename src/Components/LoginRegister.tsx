@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter, useSearchParams } from "next/navigation";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import styles from "../styles/LoginRegister.module.css";
 import { useDispatch, useSelector } from "react-redux";
 import { loginUserFromAPI } from "@/store/userSlice";
@@ -13,9 +13,6 @@ const LoginRegister = () => {
   const router = useRouter();
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    dispatch(loginUserFromAPI());
-  }, []);
   console.log("Users", loginFun);
 
   const currentAuthStatus = authStatus === "login" ? true : false;
@@ -30,14 +27,39 @@ const LoginRegister = () => {
     router.push(`/auth?authStatus=${newStatus}`, { scroll: false });
   };
 
+  const formInputRef = useRef({
+    userName: "",
+    email: "",
+    password: "",
+  });
+
+  // inputs change function
+  const handleFormInputChange = (key: string, value: string) => {
+    formInputRef.current = {
+      ...formInputRef.current,
+      [key]: value,
+    };
+  };
+
+  // submit form btn
+  const formSubmitBtn = (e: any) => {
+    e.preventDefault();
+
+    dispatch(loginUserFromAPI(formInputRef.current));
+  };
+
   return (
     <div className={styles.container}>
-      <form className={styles.form}>
+      <form className={styles.form} onSubmit={formSubmitBtn}>
         <h3 className={styles.logStatus}>{paramStatus ? "Login" : "Signup"}</h3>
 
         {/* inputs */}
         {!paramStatus && (
-          <input type="email" placeholder="Enter your email address" />
+          <input
+            type="email"
+            placeholder="Enter your email address"
+            onChange={(e) => handleFormInputChange("email", e.target.value)}
+          />
         )}
 
         <input
@@ -48,6 +70,7 @@ const LoginRegister = () => {
               ? "Enter your username or email"
               : "Enter a unique username"
           }
+          onChange={(e) => handleFormInputChange("userName", e.target.value)}
         />
 
         <input
@@ -55,6 +78,7 @@ const LoginRegister = () => {
           placeholder={
             paramStatus ? "Enter your password" : "Create a password"
           }
+          onChange={(e) => handleFormInputChange("password", e.target.value)}
         />
         {/* -------- */}
 

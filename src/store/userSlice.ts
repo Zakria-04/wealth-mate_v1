@@ -1,9 +1,9 @@
 import { loginUser } from "@/res/api";
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-export const loginUserFromAPI = createAsyncThunk("user/login-user", () => {
+export const loginUserFromAPI = createAsyncThunk("user/login-user", (body) => {
   try {
-    return loginUser({ userNameOrEmail: "zakaria", password: "12345" });
+    return loginUser(body as any);
   } catch (error) {
     console.error("error", error);
   }
