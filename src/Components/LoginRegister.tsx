@@ -3,11 +3,20 @@
 import { useRouter, useSearchParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import styles from "../styles/LoginRegister.module.css";
+import { useDispatch, useSelector } from "react-redux";
+import { loginUserFromAPI } from "@/store/userSlice";
 
 const LoginRegister = () => {
+  const loginFun = useSelector((state) => state.user.user);
   const searchParams = useSearchParams();
   const authStatus = searchParams.get("authStatus");
   const router = useRouter();
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(loginUserFromAPI());
+  }, []);
+  console.log("Users", loginFun);
 
   const currentAuthStatus = authStatus === "login" ? true : false;
   const [paramStatus, setParamStatus] = useState(currentAuthStatus);
