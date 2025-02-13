@@ -4,7 +4,6 @@ import { useRouter, useSearchParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import styles from "../styles/LoginRegister.module.css";
 
-
 const LoginRegister = () => {
   const searchParams = useSearchParams();
   const authStatus = searchParams.get("authStatus");

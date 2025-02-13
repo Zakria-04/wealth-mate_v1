@@ -2,6 +2,13 @@ import axios, { AxiosError } from "axios";
 
 const MAIN_DOMAIN = "http://localhost:8080";
 
+// user log-in
+const loginUser = (body: { userNameOrEmail: string; password: string }) => {
+  const route = "/login-user";
+  return appFetch(route, "POST", body);
+};
+
+// fetching function
 const appFetch = async (
   route: string,
   method: "GET" | "POST",
@@ -25,4 +32,4 @@ const appFetch = async (
   }
 };
 
-export default appFetch;
+export { loginUser };
