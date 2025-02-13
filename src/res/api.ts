@@ -12,17 +12,26 @@ const loginUser = (body: {
   return appFetch(route, "POST", body);
 };
 
+const getAuthenticationToken = (token: string) => {
+  const route = "/protected-route";
+  return appFetch(route, "GET", undefined, {
+    Authorization: `Bearer ${token}`,
+  });
+};
+
 // fetching function
 const appFetch = async (
   route: string,
   method: "GET" | "POST",
-  body?: Record<string, unknown>
+  body?: Record<string, unknown>,
+  headers?: Record<string, string>
 ) => {
   try {
     const dataRequest = await axios({
       method: method,
       url: MAIN_DOMAIN + route,
-      data: method !== "GET" ? body : null,
+      data: method !== "GET" ? body : undefined,
+      headers,
     });
 
     return dataRequest.data;
@@ -36,4 +45,4 @@ const appFetch = async (
   }
 };
 
-export { loginUser };
+export { loginUser, getAuthenticationToken };

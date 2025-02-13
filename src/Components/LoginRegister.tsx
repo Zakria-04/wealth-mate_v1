@@ -1,25 +1,30 @@
 "use client";
 
 import { useRouter, useSearchParams } from "next/navigation";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState, useMemo } from "react";
 import styles from "../styles/LoginRegister.module.css";
 import { useDispatch, useSelector } from "react-redux";
-import { loginUserFromAPI } from "@/store/userSlice";
+import { getUserToken, loginUserFromAPI } from "@/store/userSlice";
+import { RootState, AppDispatch } from "../store/store";
 
 const LoginRegister = () => {
-  const loginFun = useSelector((state) => state.user.user);
+  const dispatch = useDispatch<AppDispatch>();
+  const router = useRouter();
   const searchParams = useSearchParams();
   const authStatus = searchParams.get("authStatus");
-  const router = useRouter();
-  const dispatch = useDispatch();
 
-  console.log("Users", loginFun);
+  const isLoginMode = authStatus === "login";
+  const [paramStatus, setParamStatus] = useState(isLoginMode);
 
-  const currentAuthStatus = authStatus === "login" ? true : false;
-  const [paramStatus, setParamStatus] = useState(currentAuthStatus);
+  // Memoize selector for optimization
+  const { user, loading, error, token } = useSelector(
+    (state: RootState) => state.user
+  );
+
+  console.log("user is", user);
 
   useEffect(() => {
-    setParamStatus(authStatus === "login");
+    setParamStatus(isLoginMode);
   }, [authStatus]);
 
   const handleParamStatusChange = () => {
@@ -33,7 +38,6 @@ const LoginRegister = () => {
     password: "",
   });
 
-  // inputs change function
   const handleFormInputChange = (key: string, value: string) => {
     formInputRef.current = {
       ...formInputRef.current,
@@ -41,11 +45,18 @@ const LoginRegister = () => {
     };
   };
 
-  // submit form btn
-  const formSubmitBtn = (e: any) => {
+  const formSubmitBtn = (e: React.FormEvent) => {
     e.preventDefault();
 
-    dispatch(loginUserFromAPI(formInputRef.current));
+    dispatch(loginUserFromAPI(formInputRef.current))
+      .unwrap()
+      .then((loginResponse) => {
+        if (loginResponse) {
+          dispatch(getUserToken(loginResponse.token));
+        } else {
+          console.error("No token received from login response");
+        }
+      });
   };
 
   return (
@@ -53,7 +64,6 @@ const LoginRegister = () => {
       <form className={styles.form} onSubmit={formSubmitBtn}>
         <h3 className={styles.logStatus}>{paramStatus ? "Login" : "Signup"}</h3>
 
-        {/* inputs */}
         {!paramStatus && (
           <input
             type="email"
@@ -80,16 +90,17 @@ const LoginRegister = () => {
           }
           onChange={(e) => handleFormInputChange("password", e.target.value)}
         />
-        {/* -------- */}
+
+        {error && <p className={styles.error}>{error}</p>}
 
         <a className={styles.forgotHelpText}>
           {paramStatus && "Forgot your password?"}
         </a>
-        <button className={styles.logBtn}>
-          {paramStatus ? "Login" : "Get Started"}
+        <button className={styles.logBtn} disabled={loading}>
+          {loading ? "Processing..." : paramStatus ? "Login" : "Get Started"}
         </button>
+
         <p>
-          {/* Don't have an account? <span>Sign up</span> now and get started! */}
           {paramStatus ? (
             <>
               Don&apos;t have an account?{" "}
