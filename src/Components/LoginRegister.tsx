@@ -21,8 +21,6 @@ const LoginRegister = () => {
     (state: RootState) => state.user
   );
 
-  console.log("user is", user);
-
   useEffect(() => {
     setParamStatus(isLoginMode);
   }, [authStatus]);
@@ -53,6 +51,7 @@ const LoginRegister = () => {
       .then((loginResponse) => {
         if (loginResponse) {
           dispatch(getUserToken(loginResponse.token));
+          router.replace("/home");
         } else {
           console.error("No token received from login response");
         }
