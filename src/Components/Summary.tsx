@@ -3,79 +3,52 @@ import styles from "../styles/Summary.module.css";
 import Image from "next/image";
 import Images from "@/assets/Images/Images";
 
+const summaryData = [
+  { label: "Total Balance", value: "2000.00$", image: Images.balance },
+  { label: "Expenses", value: "2000.00$", image: Images.expenses },
+  { label: "Income", value: "2000.00$", image: Images.income },
+  { label: "Savings", value: "2000.00$", image: Images.savings },
+];
+
+// render summaryData component
+const SummaryBox = ({
+  label,
+  value,
+  image,
+}: {
+  label: string;
+  value: string;
+  image: string;
+}) => (
+  <div className={styles.summaryBox}>
+    <div className={styles.summaryIcons}>
+      <Image src={image} alt={label} width={20} height={20} />
+    </div>
+    <div>
+      <p className={styles.label}>{label}</p>
+      <p className={styles.value}>{value}</p>
+    </div>
+  </div>
+);
+
 const Summary = () => {
   return (
-    <div>
-      <div className={styles.summaryHeader}>
+    <section>
+      <header className={styles.summaryHeader}>
         <span>Summary</span>
-        <select>
-          <option value="">Daily</option>
-          <option value="">Monthly</option>
-          <option value="">Yearly</option>
+        <select aria-label="Select summary period">
+          <option value="daily">Daily</option>
+          <option value="monthly">Monthly</option>
+          <option value="yearly">Yearly</option>
         </select>
-      </div>
+      </header>
+
       <div className={styles.summaryBoxContainer}>
-        {/*  Balance */}
-        <div className={styles.summaryBox}>
-          <Image
-            src={Images.balance}
-            alt="Balance"
-            width={20}
-            height={20}
-            className={styles.summaryIcons}
-          />
-          <div>
-            <p>Total Balance</p>
-            <p>2000.00$</p>
-          </div>
-        </div>
-
-        {/* Expenses */}
-        <div className={styles.summaryBox}>
-          <Image
-            src={Images.expenses}
-            alt="Balance"
-            width={20}
-            height={20}
-            className={styles.summaryIcons}
-          />
-          <div>
-            <p>Expenses</p>
-            <p>2000.00$</p>
-          </div>
-        </div>
-
-        {/* Income */}
-        <div className={styles.summaryBox}>
-          <Image
-            src={Images.income}
-            alt="Balance"
-            width={25}
-            height={20}
-            className={styles.summaryIcons}
-          />
-          <div>
-            <p>Income</p>
-            <p>2000.00$</p>
-          </div>
-        </div>
-
-        {/* Savings */}
-        <div className={styles.summaryBox}>
-          <Image
-            src={Images.savings}
-            alt="Balance"
-            width={20}
-            height={20}
-            className={styles.summaryIcons}
-          />
-          <div>
-            <p>Savings</p>
-            <p>2000.00$</p>
-          </div>
-        </div>
+        {summaryData.map((item, index) => (
+          <SummaryBox key={index} {...item} />
+        ))}
       </div>
-    </div>
+    </section>
   );
 };
 

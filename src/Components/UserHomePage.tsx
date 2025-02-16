@@ -5,12 +5,12 @@ import Summary from "./Summary";
 
 const UserHomePage = () => {
   return (
-    <>
+    <div>
       <HomePageHeader />
       <div className={styles.body}>
         <Summary />
       </div>
-    </>
+    </div>
   );
 };
 

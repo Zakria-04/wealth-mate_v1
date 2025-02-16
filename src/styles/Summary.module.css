@@ -1,6 +1,14 @@
 .summaryHeader {
   display: flex;
   justify-content: space-between;
+  margin-bottom: 1rem;
+  margin-top: 2rem;
+}
+
+.summaryHeader select {
+  background-color: transparent;
+  border: none;
+  outline: none;
 }
 
 .summaryBoxContainer {
@@ -13,13 +21,25 @@
   display: flex;
   align-items: center;
   gap: 1rem;
-  padding: 1rem;
+  padding: 1.5rem;
   border-radius: 0.6rem;
   background-color: #fff;
-  width: 15rem;
+  width: 20rem;
   color: var(--text-color-3);
 }
 
 .summaryIcons {
   background-color: #e7ebf0;
+  border-radius: 0.4rem;
+  padding: 0.4rem;
+  display: flex;
+}
+
+.label {
+  font-size: 0.8rem;
+  margin-bottom: 0.2rem;
+}
+
+.value {
+  font-size: 1.3rem;
 }

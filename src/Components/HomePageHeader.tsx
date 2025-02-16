@@ -8,7 +8,6 @@ import { RootState } from "@/store/store";
 
 const HomePageHeader = () => {
   const { user } = useSelector((state: RootState) => state.user);
-  console.log(user);
 
   return (
     <div className={styles.container}>
