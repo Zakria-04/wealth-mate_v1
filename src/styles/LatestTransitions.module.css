@@ -1,0 +1,27 @@
+.container {
+  background-color: var(--text-color-2);
+  margin-top: 3rem;
+  padding: 1.1rem;
+  border-radius: 1rem;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.header p {
+  font-size: 1.2rem;
+}
+
+.header button {
+  padding: 1rem;
+  background-color: var(--primary-color);
+  border: none;
+  border-radius: 1rem;
+  color: var(--text-color-2);
+  width: 12rem;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
