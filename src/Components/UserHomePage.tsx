@@ -1,12 +1,16 @@
 import React from "react";
 import styles from "../styles/UserHomePage.module.css";
 import HomePageHeader from "./HomePageHeader";
+import Summary from "./Summary";
 
 const UserHomePage = () => {
   return (
-    <div className={styles.container}>
+    <>
       <HomePageHeader />
-    </div>
+      <div className={styles.body}>
+        <Summary />
+      </div>
+    </>
   );
 };
 

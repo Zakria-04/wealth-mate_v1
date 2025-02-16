@@ -20,7 +20,7 @@ const HomePageHeader = () => {
         priority
       />
 
-      <p>{`Welcome back, ${user.user.userName}`}</p>
+      <p>{`Welcome back, ${user?.user?.userName}`}</p>
     </div>
   );
 };

@@ -1,0 +1,25 @@
+.summaryHeader {
+  display: flex;
+  justify-content: space-between;
+}
+
+.summaryBoxContainer {
+  display: flex;
+  justify-content: center;
+  gap: 5rem;
+}
+
+.summaryBox {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+  border-radius: 0.6rem;
+  background-color: #fff;
+  width: 15rem;
+  color: var(--text-color-3);
+}
+
+.summaryIcons {
+  background-color: #e7ebf0;
+}
