@@ -6,6 +6,7 @@ import styles from "../styles/LoginRegister.module.css";
 import { useDispatch, useSelector } from "react-redux";
 import { getUserToken, loginUserFromAPI } from "@/store/userSlice";
 import { RootState, AppDispatch } from "../store/store";
+import LoadingSpinner from "./LoadingSpinner";
 
 const LoginRegister = () => {
   const dispatch = useDispatch<AppDispatch>();

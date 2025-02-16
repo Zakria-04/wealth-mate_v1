@@ -1,12 +1,14 @@
-import LoadingSpinner from '@/Components/LoadingSpinner'
-import React from 'react'
+import LoadingSpinner from "@/Components/LoadingSpinner";
+import React from "react";
+import Home from "../page";
+import UserHomePage from "@/Components/UserHomePage";
 
 const page = () => {
   return (
-    <div>
-        <LoadingSpinner />
-    </div>
-  )
-}
+    <>
+      <UserHomePage />
+    </>
+  );
+};
 
-export default page
+export default page;
