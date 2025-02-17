@@ -27,6 +27,11 @@
   cursor: pointer;
 }
 
+.latestOptionsContainer {
+  margin-top: 1rem;
+  margin-bottom: 2rem;
+}
+
 .options {
   position: relative;
   width: max-content;
@@ -34,13 +39,14 @@
   align-items: center;
   gap: 2rem;
   cursor: pointer;
+  color: #878080;
 }
 
 .options::before {
   content: "";
-  background: red;
+  background: #e7e7e7;
   position: absolute;
-  height: 2px;
+  height: 1.5px;
   width: 105%;
   bottom: -10px;
   border-radius: 1rem;
@@ -48,13 +54,14 @@
 
 .active {
   position: relative;
+  color: var(--primary-color);
 }
 
 .active::before {
   content: "";
-  background: blue;
+  background: var(--primary-color);
   position: absolute;
   width: 130%;
-  height: 6px;
+  height: 3px;
   bottom: -10px;
 }
