@@ -13,6 +13,7 @@
 
 .header p {
   font-size: 1.2rem;
+  color: var(--text-color-3);
 }
 
 .header button {
@@ -24,4 +25,36 @@
   width: 12rem;
   font-size: 0.9rem;
   cursor: pointer;
+}
+
+.options {
+  position: relative;
+  width: max-content;
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  cursor: pointer;
+}
+
+.options::before {
+  content: "";
+  background: red;
+  position: absolute;
+  height: 2px;
+  width: 105%;
+  bottom: -10px;
+  border-radius: 1rem;
+}
+
+.active {
+  position: relative;
+}
+
+.active::before {
+  content: "";
+  background: blue;
+  position: absolute;
+  width: 130%;
+  height: 6px;
+  bottom: -10px;
 }
