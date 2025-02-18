@@ -27,11 +27,6 @@
   cursor: pointer;
 }
 
-.latestOptionsContainer {
-  margin-top: 1rem;
-  margin-bottom: 2rem;
-}
-
 .options {
   position: relative;
   width: max-content;
@@ -40,6 +35,8 @@
   gap: 2rem;
   cursor: pointer;
   color: #878080;
+  margin-top: 1rem;
+  margin-bottom: 2rem;
 }
 
 .options::before {
@@ -65,3 +62,4 @@
   height: 3px;
   bottom: -10px;
 }
+

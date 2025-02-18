@@ -19,6 +19,16 @@ const getAuthenticationToken = (token: string) => {
   });
 };
 
+const createNewTransaction = (body: {
+  name: string;
+  category: string;
+  wallet: string;
+  sum: number;
+}) => {
+  const route = "/create-transaction";
+  return appFetch(route, "POST", body);
+};
+
 // fetching function
 const appFetch = async (
   route: string,
@@ -45,4 +55,4 @@ const appFetch = async (
   }
 };
 
-export { loginUser, getAuthenticationToken };
+export { loginUser, getAuthenticationToken, createNewTransaction };
