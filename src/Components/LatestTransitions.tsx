@@ -3,11 +3,16 @@ import React, { useEffect, useState } from "react";
 import styles from "../styles/LatestTransitions.module.css";
 import { AppDispatch, RootState } from "@/store/store";
 import { useDispatch, useSelector } from "react-redux";
-import { getAllTransactionsFromAPI } from "@/store/transactionSlice";
+import {
+  getAllTransactionsFromAPI,
+  getTransactionSummaryFromAPI,
+} from "@/store/transactionSlice";
 
 const LatestTransitions = () => {
   const [activeTab, setActiveTab] = useState("Expenses");
-  const { transactions } = useSelector((state: RootState) => state.transaction);
+  const { transactions, income, expenses, savings } = useSelector(
+    (state: RootState) => state.transaction
+  );
 
   if (!transactions) return null;
 
@@ -15,6 +20,12 @@ const LatestTransitions = () => {
 
   useEffect(() => {
     dispatch(getAllTransactionsFromAPI(""))
+      .unwrap()
+      .then((response) => {
+        if (response.success) {
+        }
+      });
+    dispatch(getTransactionSummaryFromAPI(""))
       .unwrap()
       .then((response) => {
         if (response.success) {

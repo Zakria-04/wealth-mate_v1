@@ -41,6 +41,11 @@ const getAllTransactions = (token: string) => {
   );
 };
 
+const getTransactionSummary = (token: string) => {
+  const route = "/transaction-summary";
+  return appFetch(route, "GET");
+};
+
 // fetching function
 const appFetch = async (
   route: string,
@@ -72,4 +77,5 @@ export {
   getAuthenticationToken,
   createNewTransaction,
   getAllTransactions,
+  getTransactionSummary,
 };

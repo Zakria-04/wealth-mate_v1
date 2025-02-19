@@ -1,14 +1,10 @@
+"use client";
 import React from "react";
 import styles from "../styles/Summary.module.css";
 import Image from "next/image";
 import Images from "@/assets/Images/Images";
-
-const summaryData = [
-  { label: "Total Balance", value: "2000.00$", image: Images.balance },
-  { label: "Expenses", value: "2000.00$", image: Images.expenses },
-  { label: "Income", value: "2000.00$", image: Images.income },
-  { label: "Savings", value: "2000.00$", image: Images.savings },
-];
+import { useSelector } from "react-redux";
+import { RootState } from "@/store/store";
 
 // render summaryData component
 const SummaryBox = ({
@@ -32,6 +28,15 @@ const SummaryBox = ({
 );
 
 const Summary = () => {
+  const { income, expenses, savings, totalBalance } = useSelector(
+    (state: RootState) => state.transaction
+  );
+  const summaryData = [
+    { label: "Total Balance", value: `${totalBalance}$`, image: Images.balance },
+    { label: "Expenses", value: `${expenses}$`, image: Images.expenses },
+    { label: "Income", value: `${income}$`, image: Images.income },
+    { label: "Savings", value: `${savings}$`, image: Images.savings },
+  ];
   return (
     <section>
       <header className={styles.summaryHeader}>

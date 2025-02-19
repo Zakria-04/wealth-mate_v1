@@ -1,5 +1,10 @@
-import { createNewTransaction, getAllTransactions } from "@/res/api";
+import {
+  createNewTransaction,
+  getAllTransactions,
+  getTransactionSummary,
+} from "@/res/api";
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { get } from "http";
 
 export const createTransactionFromAPI = createAsyncThunk(
   "create/transaction",
@@ -27,9 +32,22 @@ export const getAllTransactionsFromAPI = createAsyncThunk(
   }
 );
 
+export const getTransactionSummaryFromAPI = createAsyncThunk(
+  "get/transaction-summary",
+  async (token: string, { rejectWithValue }) => {
+    try {
+      const response = await getTransactionSummary(token);
+      return response;
+    } catch (error: any) {
+      console.error("Transaction Error:", error);
+      return rejectWithValue(error.message || "Transaction failed");
+    }
+  }
+);
+
 interface TransactionState {
   _id?: string;
-  date?: any
+  date?: any;
   name: string;
   category: string;
   wallet: string;
@@ -40,12 +58,20 @@ interface InitialState {
   transactions: TransactionState[] | null;
   loading: boolean;
   error: string | null;
+  totalBalance: number;
+  income: number;
+  expenses: number;
+  savings: number;
 }
 
 const initialState: InitialState = {
   transactions: [],
   loading: false,
   error: null,
+  totalBalance: 0,
+  income: 0,
+  expenses: 0,
+  savings: 0,
 };
 
 const transactionSlice = createSlice({
@@ -53,6 +79,7 @@ const transactionSlice = createSlice({
   initialState,
   reducers: {},
   extraReducers: (builder) => {
+    // create transaction
     builder
       .addCase(createTransactionFromAPI.pending, (state) => {
         state.loading = true;
@@ -69,7 +96,7 @@ const transactionSlice = createSlice({
         state.loading = false;
         state.error = action.payload as string;
       });
-
+    // get all transactions
     builder
       .addCase(getAllTransactionsFromAPI.pending, (state) => {
         state.loading = true;
@@ -83,6 +110,26 @@ const transactionSlice = createSlice({
         }
       )
       .addCase(getAllTransactionsFromAPI.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload as string;
+      });
+    // get transaction summary
+    builder
+      .addCase(getTransactionSummaryFromAPI.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(
+        getTransactionSummaryFromAPI.fulfilled,
+        (state, action: PayloadAction<any>) => {
+          state.loading = false;
+          state.totalBalance = action.payload.balance;
+          state.income = action.payload.income;
+          state.expenses = action.payload.expenses;
+          state.savings = action.payload.savings;
+        }
+      )
+      .addCase(getTransactionSummaryFromAPI.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload as string;
       });
