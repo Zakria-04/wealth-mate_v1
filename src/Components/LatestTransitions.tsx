@@ -49,35 +49,37 @@ const LatestTransitions = () => {
       </div>
 
       {/* recent transition render */}
-      <table className={styles.table}>
-        <thead>
-          <tr>
-            {["Date", "Name", "Category", "Wallet", "Sum"].map((option) => (
-              <th key={option}>{option}</th>
-            ))}
-          </tr>
-        </thead>
-        <tbody>
-          {transactions.map((transaction) => {
-            const transactionDate = new Date(transaction.date);
-            const formattedDate =
-              transactionDate.getDate() +
-              "." +
-              (transactionDate.getMonth() + 1) +
-              "." +
-              transactionDate.getFullYear();
-            return (
-              <tr key={transaction._id}>
-                <td>{formattedDate}</td>
-                <td>{transaction.name}</td>
-                <td>{transaction.category}</td>
-                <td>{transaction.wallet}</td>
-                <td>{transaction.sum}</td>
-              </tr>
-            );
-          })}
-        </tbody>
-      </table>
+      <div className={styles.tableContainer}>
+        <table className={styles.table}>
+          <thead>
+            <tr>
+              {["Date", "Name", "Category", "Wallet", "Sum"].map((option) => (
+                <th key={option}>{option}</th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {transactions.map((transaction) => {
+              const transactionDate = new Date(transaction.date);
+              const formattedDate =
+                transactionDate.getDate() +
+                "." +
+                (transactionDate.getMonth() + 1) +
+                "." +
+                transactionDate.getFullYear();
+              return (
+                <tr key={transaction._id}>
+                  <td>{formattedDate}</td>
+                  <td>{transaction.name}</td>
+                  <td>{transaction.category}</td>
+                  <td>{transaction.wallet}</td>
+                  <td>{transaction.sum}</td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 };
