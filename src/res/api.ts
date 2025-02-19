@@ -29,6 +29,18 @@ const createNewTransaction = (body: {
   return appFetch(route, "POST", body);
 };
 
+const getAllTransactions = (token: string) => {
+  const route = "/transactions";
+  return appFetch(
+    route,
+    "GET",
+    { token },
+    {
+      Authorization: `Bearer ${token}`,
+    }
+  );
+};
+
 // fetching function
 const appFetch = async (
   route: string,
@@ -55,4 +67,9 @@ const appFetch = async (
   }
 };
 
-export { loginUser, getAuthenticationToken, createNewTransaction };
+export {
+  loginUser,
+  getAuthenticationToken,
+  createNewTransaction,
+  getAllTransactions,
+};

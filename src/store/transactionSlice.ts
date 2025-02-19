@@ -1,4 +1,4 @@
-import { createNewTransaction } from "@/res/api";
+import { createNewTransaction, getAllTransactions } from "@/res/api";
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 export const createTransactionFromAPI = createAsyncThunk(
@@ -6,6 +6,19 @@ export const createTransactionFromAPI = createAsyncThunk(
   async (body: any, { rejectWithValue }) => {
     try {
       const response = await createNewTransaction(body);
+      return response;
+    } catch (error: any) {
+      console.error("Transaction Error:", error);
+      return rejectWithValue(error.message || "Transaction failed");
+    }
+  }
+);
+
+export const getAllTransactionsFromAPI = createAsyncThunk(
+  "get/transactions",
+  async (token: string, { rejectWithValue }) => {
+    try {
+      const response = await getAllTransactions(token);
       return response;
     } catch (error: any) {
       console.error("Transaction Error:", error);
@@ -53,7 +66,24 @@ const transactionSlice = createSlice({
       .addCase(createTransactionFromAPI.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload as string;
+      });
+
+    builder
+      .addCase(getAllTransactionsFromAPI.pending, (state) => {
+        state.loading = true;
+        state.error = null;
       })
+      .addCase(
+        getAllTransactionsFromAPI.fulfilled,
+        (state, action: PayloadAction<any>) => {
+          state.loading = false;
+          state.transactions = action.payload;
+        }
+      )
+      .addCase(getAllTransactionsFromAPI.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload as string;
+      });
   },
 });
 
