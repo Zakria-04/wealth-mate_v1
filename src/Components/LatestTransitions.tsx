@@ -1,25 +1,26 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import styles from "../styles/LatestTransitions.module.css";
-import { AppDispatch } from "@/store/store";
-import { useDispatch } from "react-redux";
+import { AppDispatch, RootState } from "@/store/store";
+import { useDispatch, useSelector } from "react-redux";
 import { getAllTransactionsFromAPI } from "@/store/transactionSlice";
 
 const LatestTransitions = () => {
   const [activeTab, setActiveTab] = useState("Expenses");
-  const [transactionModal, setTransactionModal] = useState(false);
+  const { transactions } = useSelector((state: RootState) => state.transaction);
+
+  if (!transactions) return null;
 
   const dispatch = useDispatch<AppDispatch>();
 
   useEffect(() => {
     dispatch(getAllTransactionsFromAPI(""))
-    .unwrap()
-    .then((response) => {
-      if (response.success) {
-        
-      }
-    })
-  }, [])
+      .unwrap()
+      .then((response) => {
+        if (response.success) {
+        }
+      });
+  }, []);
 
   return (
     <div className={styles.container}>
@@ -57,9 +58,24 @@ const LatestTransitions = () => {
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td></td>
-          </tr>
+          {transactions.map((transaction) => {
+            const transactionDate = new Date(transaction.date);
+            const formattedDate =
+              transactionDate.getDate() +
+              "." +
+              (transactionDate.getMonth() + 1) +
+              "." +
+              transactionDate.getFullYear();
+            return (
+              <tr key={transaction._id}>
+                <td>{formattedDate}</td>
+                <td>{transaction.name}</td>
+                <td>{transaction.category}</td>
+                <td>{transaction.wallet}</td>
+                <td>{transaction.sum}</td>
+              </tr>
+            );
+          })}
         </tbody>
       </table>
     </div>

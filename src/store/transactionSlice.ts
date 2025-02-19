@@ -28,6 +28,8 @@ export const getAllTransactionsFromAPI = createAsyncThunk(
 );
 
 interface TransactionState {
+  _id?: string;
+  date?: any
   name: string;
   category: string;
   wallet: string;
@@ -35,13 +37,13 @@ interface TransactionState {
 }
 
 interface InitialState {
-  transactions: TransactionState | {};
+  transactions: TransactionState[] | null;
   loading: boolean;
   error: string | null;
 }
 
 const initialState: InitialState = {
-  transactions: {},
+  transactions: [],
   loading: false,
   error: null,
 };
@@ -77,7 +79,7 @@ const transactionSlice = createSlice({
         getAllTransactionsFromAPI.fulfilled,
         (state, action: PayloadAction<any>) => {
           state.loading = false;
-          state.transactions = action.payload;
+          state.transactions = action.payload.transactions;
         }
       )
       .addCase(getAllTransactionsFromAPI.rejected, (state, action) => {
