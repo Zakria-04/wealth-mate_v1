@@ -33,11 +33,6 @@ const LatestTransitions = () => {
       });
   }, []);
 
-  // get categories
-  const getCategories = new Set(
-    transactions.map((transaction) => transaction.category)
-  );
-
   // get transactions unique dates
   const uniqueDates = new Set(
     transactions.map((transaction) => {
@@ -46,9 +41,17 @@ const LatestTransitions = () => {
     })
   );
 
+  // get transactions unique names
   const uniqueTransactionNames = new Set(
     transactions.map((transaction) => transaction.name)
   );
+
+  // get transactions unique categories
+  const getCategories = Array.from(
+    new Set(transactions.map((transaction) => transaction.category))
+  );
+
+  console.log(getCategories);
 
   return (
     <div className={styles.container}>
@@ -124,6 +127,27 @@ const LatestTransitions = () => {
                 ))}
               </div>
             )}
+          </div>
+
+          {/* category filter */}
+          <div>
+            <select name="category" defaultValue={""}>
+              <option value="">category</option>
+              {[
+                "income",
+                "saving",
+                "Food & dessert",
+                "Entertainment",
+                "Health & Wellness",
+                "Electronics & Gadgets",
+                "Accessories",
+                "Other",
+              ].map((category) => (
+                <option key={category} value="">
+                  {category}
+                </option>
+              ))}
+            </select>
           </div>
         </div>
       </div>
