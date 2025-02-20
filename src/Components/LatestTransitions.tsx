@@ -12,6 +12,8 @@ const LatestTransitions = () => {
   const [activeTab, setActiveTab] = useState("Expenses");
   const { transactions } = useSelector((state: RootState) => state.transaction);
 
+  const [nameSelected, setNameSelected] = useState(false);
+
   if (!transactions) return null;
 
   const dispatch = useDispatch<AppDispatch>();
@@ -37,12 +39,15 @@ const LatestTransitions = () => {
   );
 
   // get transactions unique dates
-
   const uniqueDates = new Set(
     transactions.map((transaction) => {
       const date = new Date(transaction.date);
       return date.toISOString().split("T")[0];
     })
+  );
+
+  const uniqueTransactionNames = new Set(
+    transactions.map((transaction) => transaction.name)
   );
 
   return (
@@ -92,8 +97,6 @@ const LatestTransitions = () => {
                 Date
               </option>
               {Array.from(uniqueDates).map((getTransactionsDate) => {
-                console.log(getTransactionsDate);
-                
                 const transactionDate = new Date(getTransactionsDate);
                 const formattedDate =
                   transactionDate.getDate() +
@@ -108,6 +111,19 @@ const LatestTransitions = () => {
                 );
               })}
             </select>
+          </div>
+
+          {/* Name filter */}
+          <div className={styles.nameFilter}>
+            <p>Name</p>
+            {nameSelected && (
+              <div className={styles.nameSelectContainer}>
+                <input type="text" />
+                {Array.from(uniqueTransactionNames).map((transactionName) => (
+                  <p>{transactionName}</p>
+                ))}
+              </div>
+            )}
           </div>
         </div>
       </div>

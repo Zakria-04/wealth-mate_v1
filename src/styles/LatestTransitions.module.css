@@ -87,6 +87,26 @@
   cursor: pointer;
 }
 
+.nameSelectContainer {
+  position: absolute;
+  background-color: #e7ebf0;
+  padding: 0.5rem;
+  border-radius: .6rem;
+}
+
+.nameSelectContainer input {
+  padding: 0.3rem;
+}
+
+.nameSelectContainer p {
+  line-height: 2;
+  cursor: pointer;
+}
+
+.nameSelectContainer p:hover {
+  background-color: #d5d9dd;
+}
+
 .table {
   border-collapse: collapse;
   width: 100%;
