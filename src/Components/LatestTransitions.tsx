@@ -94,7 +94,7 @@ const LatestTransitions = () => {
 
         <div className={styles.categoryContainer}>
           {/* date filter */}
-          <div>
+          <div className={`${styles.selectContainer}`}>
             <select name="date" defaultValue="">
               <option disabled value="">
                 Date
@@ -117,7 +117,7 @@ const LatestTransitions = () => {
           </div>
 
           {/* Name filter */}
-          <div className={styles.nameFilter}>
+          <div className={`${styles.nameFilter} ${styles.selectContainer}`}>
             <p>Name</p>
             {nameSelected && (
               <div className={styles.nameSelectContainer}>
@@ -130,7 +130,7 @@ const LatestTransitions = () => {
           </div>
 
           {/* category filter */}
-          <div>
+          <div className={styles.selectContainer}>
             <select name="category" defaultValue={""}>
               <option value="">category</option>
               {[
@@ -147,6 +147,20 @@ const LatestTransitions = () => {
                   {category}
                 </option>
               ))}
+            </select>
+          </div>
+
+          {/* Wallet filter */}
+          <div className={`${styles.selectContainer}`}>
+            <select name="" id="">
+              <option value="">Wallet</option>
+            </select>
+          </div>
+
+          {/* Sum filter */}
+          <div className={`${styles.selectContainer}`}>
+            <select name="" id="">
+              <option value="">Sum</option>
             </select>
           </div>
         </div>
