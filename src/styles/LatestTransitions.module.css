@@ -115,6 +115,11 @@
   border-radius: 10rem;
 }
 
+.select {
+  border: none;
+  background-color: transparent;
+}
+
 .table {
   border-collapse: collapse;
   width: 100%;

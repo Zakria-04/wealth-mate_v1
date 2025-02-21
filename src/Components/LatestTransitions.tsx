@@ -51,7 +51,13 @@ const LatestTransitions = () => {
     new Set(transactions.map((transaction) => transaction.category))
   );
 
-  console.log(getCategories);
+  // const getUniqueMonths = new Set(
+  //   Array.from(uniqueDates).map((date) => new Date(date).getMonth() + 1)
+  // );
+
+  const getUniqueMonths = new Set(
+    Array.from(uniqueDates).map((date) => new Date(date).getMonth() + 1)
+  );
 
   return (
     <div className={styles.container}>
@@ -95,22 +101,69 @@ const LatestTransitions = () => {
         <div className={styles.categoryContainer}>
           {/* date filter */}
           <div className={`${styles.selectContainer}`}>
-            <select name="date" defaultValue="">
+            <select name="date" defaultValue="" className={styles.select}>
               <option disabled value="">
                 Date
               </option>
-              {Array.from(uniqueDates).map((getTransactionsDate) => {
-                const transactionDate = new Date(getTransactionsDate);
-                const formattedDate =
-                  transactionDate.getDate() +
-                  "." +
-                  (transactionDate.getMonth() + 1) +
-                  "." +
-                  transactionDate.getFullYear();
+
+              {Array.from(getUniqueMonths).map((month) => {
+                const monthDates = Array.from(uniqueDates).filter((date) => {
+                  return new Date(date).getMonth() + 1 === month;
+                });
+
+                // switch (month) {
+                //   case 1:
+                //     month = "January";
+                //     break;
+                //   case 2:
+                //     month = "February";
+                //     break;
+                //   case 3:
+                //     month = "March";
+                //     break;
+                //   case 4:
+                //     month = "April";
+                //     break;
+                //   case 5:
+                //     month = "May";
+                //     break;
+                //   case 6:
+                //     month = "June";
+                //     break;
+                //   case 7:
+                //     month = "July";
+                //     break;
+                //   case 8:
+                //     month = "August";
+                //     break;
+                //   case 9:
+                //     month = "September";
+                //     break;
+                //   case 10:
+                //     month = "October";
+                //     break;
+                //   case 11:
+                //     month = "November";
+                //     break;
+                //   case 12:
+                //     month = "December";
+                //     break;
+                //   default:
+                //     break;
+                // }
+
                 return (
-                  <option key={getTransactionsDate} value={getTransactionsDate}>
-                    {formattedDate}
-                  </option>
+                  <optgroup key={month} label={`${month}`}>
+                    {monthDates.map((date) => {
+                      const day = new Date(date).getDate();
+
+                      return (
+                        <option key={day} value={date}>
+                          {`Day ${date}`}
+                        </option>
+                      );
+                    })}
+                  </optgroup>
                 );
               })}
             </select>
@@ -131,7 +184,7 @@ const LatestTransitions = () => {
 
           {/* category filter */}
           <div className={styles.selectContainer}>
-            <select name="category" defaultValue={""}>
+            <select name="category" defaultValue={""} className={styles.select}>
               <option value="">category</option>
               {[
                 "income",
@@ -152,14 +205,14 @@ const LatestTransitions = () => {
 
           {/* Wallet filter */}
           <div className={`${styles.selectContainer}`}>
-            <select name="" id="">
+            <select name="" id="" className={styles.select}>
               <option value="">Wallet</option>
             </select>
           </div>
 
           {/* Sum filter */}
           <div className={`${styles.selectContainer}`}>
-            <select name="" id="">
+            <select name="" id="" className={styles.select}>
               <option value="">Sum</option>
             </select>
           </div>
