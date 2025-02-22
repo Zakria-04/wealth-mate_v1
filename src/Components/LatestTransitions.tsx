@@ -34,11 +34,20 @@ const LatestTransitions = () => {
   }, []);
 
   // get transactions unique dates
-  const uniqueDates = new Set(
-    transactions.map((transaction) => {
-      const date = new Date(transaction.date);
-      return date.toISOString().split("T")[0];
-    })
+  // const uniqueDates = new Set(
+  //   transactions.map((transaction) => {
+  //     const date = new Date(transaction.date);
+  //     return date.toISOString().split("T")[0];
+  //   })
+  // );
+
+  const uniqueDates = Array.from(
+    new Set(
+      transactions.map((transaction) => {
+        const date = new Date(transaction.date);
+        return date.toISOString().split("T")[0];
+      })
+    )
   );
 
   // get transactions unique names
@@ -51,13 +60,17 @@ const LatestTransitions = () => {
     new Set(transactions.map((transaction) => transaction.category))
   );
 
-  // const getUniqueMonths = new Set(
-  //   Array.from(uniqueDates).map((date) => new Date(date).getMonth() + 1)
-  // );
-
-  const getUniqueMonths = new Set(
-    Array.from(uniqueDates).map((date) => new Date(date).getMonth() + 1)
-  );
+  const getUniqueMonthsAndYears = Array.from(
+    new Set(
+      uniqueDates.map((date) => {
+        const dateObj = new Date(date);
+        return JSON.stringify({
+          month: dateObj.getMonth() + 1,
+          year: dateObj.getFullYear(),
+        });
+      })
+    )
+  ).map((str) => JSON.parse(str));
 
   return (
     <div className={styles.container}>
@@ -106,60 +119,25 @@ const LatestTransitions = () => {
                 Date
               </option>
 
-              {Array.from(getUniqueMonths).map((month) => {
-                const monthDates = Array.from(uniqueDates).filter((date) => {
-                  return new Date(date).getMonth() + 1 === month;
-                });
-
-                // switch (month) {
-                //   case 1:
-                //     month = "January";
-                //     break;
-                //   case 2:
-                //     month = "February";
-                //     break;
-                //   case 3:
-                //     month = "March";
-                //     break;
-                //   case 4:
-                //     month = "April";
-                //     break;
-                //   case 5:
-                //     month = "May";
-                //     break;
-                //   case 6:
-                //     month = "June";
-                //     break;
-                //   case 7:
-                //     month = "July";
-                //     break;
-                //   case 8:
-                //     month = "August";
-                //     break;
-                //   case 9:
-                //     month = "September";
-                //     break;
-                //   case 10:
-                //     month = "October";
-                //     break;
-                //   case 11:
-                //     month = "November";
-                //     break;
-                //   case 12:
-                //     month = "December";
-                //     break;
-                //   default:
-                //     break;
-                // }
+              {Array.from(getUniqueMonthsAndYears).map(({ month, year }) => {
+                const monthYearDates = Array.from(uniqueDates).filter(
+                  (date) => {
+                    const dateObj = new Date(date);
+                    return (
+                      dateObj.getMonth() + 1 === month &&
+                      dateObj.getFullYear() === year
+                    );
+                  }
+                );
 
                 return (
-                  <optgroup key={month} label={`${month}`}>
-                    {monthDates.map((date) => {
+                  <optgroup key={`${month}-${year}`} label={`${month}/${year}`}>
+                    {monthYearDates.map((date) => {
                       const day = new Date(date).getDate();
 
                       return (
-                        <option key={day} value={date}>
-                          {`Day ${date}`}
+                        <option key={date} value={date}>
+                          {`${date}`}
                         </option>
                       );
                     })}
