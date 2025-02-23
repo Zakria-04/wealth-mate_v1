@@ -31,12 +31,16 @@ const LatestTransitions: React.FC = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const transactionsResponse = await dispatch(getAllTransactionsFromAPI("")).unwrap();
+        const transactionsResponse = await dispatch(
+          getAllTransactionsFromAPI("")
+        ).unwrap();
         if (transactionsResponse.success) {
           // Handle success
         }
 
-        const summaryResponse = await dispatch(getTransactionSummaryFromAPI("")).unwrap();
+        const summaryResponse = await dispatch(
+          getTransactionSummaryFromAPI("")
+        ).unwrap();
         if (summaryResponse.success) {
           // Handle success
         }
@@ -80,10 +84,14 @@ const LatestTransitions: React.FC = () => {
 
   // Filter transactions based on selected filters
   const filteredTransactions = transactions.filter((transaction) => {
-    const transactionDate = new Date(transaction.date).toISOString().split("T")[0];
+    const transactionDate = new Date(transaction.date)
+      .toISOString()
+      .split("T")[0];
     const matchesDate = selectedDate ? transactionDate === selectedDate : true;
     const matchesName = selectedName ? transaction.name === selectedName : true;
-    const matchesCategory = selectedCategory ? transaction.category === selectedCategory : true;
+    const matchesCategory = selectedCategory
+      ? transaction.category === selectedCategory
+      : true;
     const matchesSearch = searchQuery
       ? transaction.name.toLowerCase().includes(searchQuery.toLowerCase())
       : true;
@@ -148,7 +156,13 @@ const LatestTransitions: React.FC = () => {
 
         <div className={styles.categoryContainer}>
           {/* Date Filter */}
-          <div className={styles.selectContainer}>
+          <div
+            className={
+              !selectedDate
+                ? styles.selectContainer
+                : styles.activeSelectContainer
+            }
+          >
             <select
               name="date"
               value={selectedDate}
@@ -180,7 +194,11 @@ const LatestTransitions: React.FC = () => {
 
           {/* Name Filter */}
           <div className={`${styles.nameFilter} ${styles.selectContainer}`}>
-            <p role="button" tabIndex={0} onClick={() => setNameSelected(!nameSelected)}>
+            <p
+              role="button"
+              tabIndex={0}
+              onClick={() => setNameSelected(!nameSelected)}
+            >
               Name
             </p>
             {nameSelected && (
@@ -244,7 +262,9 @@ const LatestTransitions: React.FC = () => {
           <tbody>
             {filteredTransactions.map((transaction: Transaction) => {
               const transactionDate = new Date(transaction.date);
-              const formattedDate = `${transactionDate.getDate()}.${transactionDate.getMonth() + 1}.${transactionDate.getFullYear()}`;
+              const formattedDate = `${transactionDate.getDate()}.${
+                transactionDate.getMonth() + 1
+              }.${transactionDate.getFullYear()}`;
 
               // Determine hover class based on category
               const hoverClass =

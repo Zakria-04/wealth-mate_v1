@@ -115,6 +115,21 @@
   border-radius: 10rem;
 }
 
+.activeSelectContainer {
+  background-color: var(--primary-color);
+  padding: 0.8rem;
+  width: 11rem;
+  text-align: center;
+  border-radius: 10rem;
+}
+.activeSelectContainer select {
+  color: var(--text-color-2);
+}
+
+.activeSelectContainer option {
+  /* color: red; */
+}
+
 .select {
   border: none;
   background-color: transparent;
