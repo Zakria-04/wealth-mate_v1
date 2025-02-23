@@ -245,8 +245,17 @@ const LatestTransitions: React.FC = () => {
             {filteredTransactions.map((transaction: Transaction) => {
               const transactionDate = new Date(transaction.date);
               const formattedDate = `${transactionDate.getDate()}.${transactionDate.getMonth() + 1}.${transactionDate.getFullYear()}`;
+
+              // Determine hover class based on category
+              const hoverClass =
+                transaction.category.toLowerCase() === "income"
+                  ? styles.incomeHover
+                  : transaction.category.toLowerCase() !== "saving"
+                  ? styles.expenseHover
+                  : styles.savingHover;
+
               return (
-                <tr key={transaction._id}>
+                <tr key={transaction._id} className={hoverClass}>
                   <td>{formattedDate}</td>
                   <td>{transaction.name}</td>
                   <td>{transaction.category}</td>

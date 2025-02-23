@@ -55,7 +55,7 @@ interface TransactionState {
 }
 
 interface InitialState {
-  transactions: TransactionState[] | null;
+  transactions: TransactionState[] | null | any;
   loading: boolean;
   error: string | null;
   totalBalance: number;

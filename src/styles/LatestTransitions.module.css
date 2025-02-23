@@ -144,3 +144,21 @@
 .table tr:hover {
   background-color: #e3e3e3;
 }
+
+.selectedCategory {
+  background-color: var(--primary-color);
+  color: var(--text-color-2);
+  box-shadow: 0 4px 6px rgba(108, 92, 231, 0.2);
+}
+
+.incomeHover:hover {
+  background-color: #e8f5e9 !important; /* Light green */
+}
+
+.expenseHover:hover {
+  background-color: #ffebee !important; /* Light red */
+}
+
+.savingHover:hover {
+  background-color: #e3f2fd !important; /* Light blue */
+}
