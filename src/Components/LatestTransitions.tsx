@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import styles from "../styles/LatestTransitions.module.css";
 import { AppDispatch, RootState } from "@/store/store";
 import { useDispatch, useSelector } from "react-redux";
@@ -8,39 +8,47 @@ import {
   getTransactionSummaryFromAPI,
 } from "@/store/transactionSlice";
 
-const LatestTransitions = () => {
-  const [activeTab, setActiveTab] = useState("Expenses");
+interface Transaction {
+  _id: string;
+  date: string;
+  name: string;
+  category: string;
+  wallet: string;
+  sum: number;
+}
+
+const LatestTransitions: React.FC = () => {
+  const [activeTab, setActiveTab] = useState<string>("Expenses");
+  const [nameSelected, setNameSelected] = useState<boolean>(false);
+  const [selectedDate, setSelectedDate] = useState<string>("");
+  const [selectedName, setSelectedName] = useState<string>("");
+  const [selectedCategory, setSelectedCategory] = useState<string>("");
+  const [searchQuery, setSearchQuery] = useState<string>("");
+
   const { transactions } = useSelector((state: RootState) => state.transaction);
-
-  const [nameSelected, setNameSelected] = useState(false);
-
-  if (!transactions) return null;
-
   const dispatch = useDispatch<AppDispatch>();
 
   useEffect(() => {
-    dispatch(getAllTransactionsFromAPI(""))
-      .unwrap()
-      .then((response) => {
-        if (response.success) {
+    const fetchData = async () => {
+      try {
+        const transactionsResponse = await dispatch(getAllTransactionsFromAPI("")).unwrap();
+        if (transactionsResponse.success) {
+          // Handle success
         }
-      });
-    dispatch(getTransactionSummaryFromAPI(""))
-      .unwrap()
-      .then((response) => {
-        if (response.success) {
+
+        const summaryResponse = await dispatch(getTransactionSummaryFromAPI("")).unwrap();
+        if (summaryResponse.success) {
+          // Handle success
         }
-      });
-  }, []);
+      } catch (error) {
+        console.error("Failed to fetch data:", error);
+      }
+    };
 
-  // get transactions unique dates
-  // const uniqueDates = new Set(
-  //   transactions.map((transaction) => {
-  //     const date = new Date(transaction.date);
-  //     return date.toISOString().split("T")[0];
-  //   })
-  // );
+    fetchData();
+  }, [dispatch]);
 
+  // Get unique dates, names, and categories
   const uniqueDates = Array.from(
     new Set(
       transactions.map((transaction) => {
@@ -50,13 +58,11 @@ const LatestTransitions = () => {
     )
   );
 
-  // get transactions unique names
-  const uniqueTransactionNames = new Set(
-    transactions.map((transaction) => transaction.name)
+  const uniqueTransactionNames = Array.from(
+    new Set(transactions.map((transaction) => transaction.name))
   );
 
-  // get transactions unique categories
-  const getCategories = Array.from(
+  const uniqueCategories = Array.from(
     new Set(transactions.map((transaction) => transaction.category))
   );
 
@@ -72,28 +78,56 @@ const LatestTransitions = () => {
     )
   ).map((str) => JSON.parse(str));
 
+  // Filter transactions based on selected filters
+  const filteredTransactions = transactions.filter((transaction) => {
+    const transactionDate = new Date(transaction.date).toISOString().split("T")[0];
+    const matchesDate = selectedDate ? transactionDate === selectedDate : true;
+    const matchesName = selectedName ? transaction.name === selectedName : true;
+    const matchesCategory = selectedCategory ? transaction.category === selectedCategory : true;
+    const matchesSearch = searchQuery
+      ? transaction.name.toLowerCase().includes(searchQuery.toLowerCase())
+      : true;
+
+    return matchesDate && matchesName && matchesCategory && matchesSearch;
+  });
+
+  const handleDateFilter = useCallback((date: string) => {
+    setSelectedDate(date);
+  }, []);
+
+  const handleNameFilter = useCallback((name: string) => {
+    setSelectedName(name);
+    setNameSelected(false); // Close the name dropdown after selection
+  }, []);
+
+  const handleCategoryFilter = useCallback((category: string) => {
+    setSelectedCategory(category);
+  }, []);
+
+  if (!transactions) return null;
+
   return (
     <div className={styles.container}>
-      {/* transition header */}
       <header className={styles.header}>
         <p>Recent transactions</p>
-        <button>+ Add transaction</button>
+        <button aria-label="Add transaction">+ Add transaction</button>
       </header>
 
-      {/* recent transition options */}
       <div className={styles.options}>
         {["Expenses", "Income", "Saving"].map((option) => (
           <p
             key={option}
-            className={activeTab === option ? `${styles.active}` : ""}
+            role="button"
+            tabIndex={0}
+            className={activeTab === option ? styles.active : ""}
             onClick={() => setActiveTab(option)}
+            onKeyDown={(e) => e.key === "Enter" && setActiveTab(option)}
           >
             {option}
           </p>
         ))}
       </div>
 
-      {/* category render and filter */}
       <div className={styles.filterContainer}>
         <div>
           <svg
@@ -101,6 +135,7 @@ const LatestTransitions = () => {
             height="11px"
             viewBox="0 0 18 12"
             width="17px"
+            aria-hidden="true"
           >
             <g fill="none" fillRule="evenodd">
               <g fill="#3c3737">
@@ -112,92 +147,91 @@ const LatestTransitions = () => {
         </div>
 
         <div className={styles.categoryContainer}>
-          {/* date filter */}
-          <div className={`${styles.selectContainer}`}>
-            <select name="date" defaultValue="" className={styles.select}>
-              <option disabled value="">
-                Date
-              </option>
-
-              {Array.from(getUniqueMonthsAndYears).map(({ month, year }) => {
-                const monthYearDates = Array.from(uniqueDates).filter(
-                  (date) => {
-                    const dateObj = new Date(date);
-                    return (
-                      dateObj.getMonth() + 1 === month &&
-                      dateObj.getFullYear() === year
-                    );
-                  }
-                );
+          {/* Date Filter */}
+          <div className={styles.selectContainer}>
+            <select
+              name="date"
+              value={selectedDate}
+              onChange={(e) => handleDateFilter(e.target.value)}
+              className={styles.select}
+            >
+              <option value="">All Dates</option>
+              {getUniqueMonthsAndYears.map(({ month, year }) => {
+                const monthYearDates = uniqueDates.filter((date) => {
+                  const dateObj = new Date(date);
+                  return (
+                    dateObj.getMonth() + 1 === month &&
+                    dateObj.getFullYear() === year
+                  );
+                });
 
                 return (
                   <optgroup key={`${month}-${year}`} label={`${month}/${year}`}>
-                    {monthYearDates.map((date) => {
-                      const day = new Date(date).getDate();
-
-                      return (
-                        <option key={date} value={date}>
-                          {`${date}`}
-                        </option>
-                      );
-                    })}
+                    {monthYearDates.map((date) => (
+                      <option key={date} value={date}>
+                        {date}
+                      </option>
+                    ))}
                   </optgroup>
                 );
               })}
             </select>
           </div>
 
-          {/* Name filter */}
+          {/* Name Filter */}
           <div className={`${styles.nameFilter} ${styles.selectContainer}`}>
-            <p>Name</p>
+            <p role="button" tabIndex={0} onClick={() => setNameSelected(!nameSelected)}>
+              Name
+            </p>
             {nameSelected && (
               <div className={styles.nameSelectContainer}>
-                <input type="text" />
-                {Array.from(uniqueTransactionNames).map((transactionName) => (
-                  <p>{transactionName}</p>
-                ))}
+                <input
+                  type="text"
+                  placeholder="Search by name"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                />
+                {uniqueTransactionNames
+                  .filter((name) =>
+                    name.toLowerCase().includes(searchQuery.toLowerCase())
+                  )
+                  .map((transactionName) => (
+                    <p
+                      key={transactionName}
+                      role="button"
+                      tabIndex={0}
+                      onClick={() => handleNameFilter(transactionName)}
+                      onKeyDown={(e) =>
+                        e.key === "Enter" && handleNameFilter(transactionName)
+                      }
+                    >
+                      {transactionName}
+                    </p>
+                  ))}
               </div>
             )}
           </div>
 
-          {/* category filter */}
+          {/* Category Filter */}
           <div className={styles.selectContainer}>
-            <select name="category" defaultValue={""} className={styles.select}>
-              <option value="">category</option>
-              {[
-                "income",
-                "saving",
-                "Food & dessert",
-                "Entertainment",
-                "Health & Wellness",
-                "Electronics & Gadgets",
-                "Accessories",
-                "Other",
-              ].map((category) => (
-                <option key={category} value="">
+            <select
+              name="category"
+              value={selectedCategory}
+              onChange={(e) => handleCategoryFilter(e.target.value)}
+              className={styles.select}
+            >
+              <option value="">All Categories</option>
+              {uniqueCategories.map((category) => (
+                <option key={category} value={category}>
                   {category}
                 </option>
               ))}
             </select>
           </div>
-
-          {/* Wallet filter */}
-          <div className={`${styles.selectContainer}`}>
-            <select name="" id="" className={styles.select}>
-              <option value="">Wallet</option>
-            </select>
-          </div>
-
-          {/* Sum filter */}
-          <div className={`${styles.selectContainer}`}>
-            <select name="" id="" className={styles.select}>
-              <option value="">Sum</option>
-            </select>
-          </div>
         </div>
       </div>
 
-      {/* recent transition render */}
+      {/* Render Filtered Transactions */}
       <div className={styles.tableContainer}>
         <table className={styles.table}>
           <thead>
@@ -208,14 +242,9 @@ const LatestTransitions = () => {
             </tr>
           </thead>
           <tbody>
-            {transactions.map((transaction) => {
+            {filteredTransactions.map((transaction: Transaction) => {
               const transactionDate = new Date(transaction.date);
-              const formattedDate =
-                transactionDate.getDate() +
-                "." +
-                (transactionDate.getMonth() + 1) +
-                "." +
-                transactionDate.getFullYear();
+              const formattedDate = `${transactionDate.getDate()}.${transactionDate.getMonth() + 1}.${transactionDate.getFullYear()}`;
               return (
                 <tr key={transaction._id}>
                   <td>{formattedDate}</td>
